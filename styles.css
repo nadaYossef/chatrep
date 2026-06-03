@@ -33,7 +33,8 @@ table tbody td{padding:8px;border-bottom:1px solid rgba(0,0,0,0.04);overflow:hid
 #ruleTable th:nth-child(7), #ruleTable td:nth-child(7){width:96px}
 #ruleTable th:nth-child(8), #ruleTable td:nth-child(8){width:96px}
 #ruleTable th:nth-child(9), #ruleTable td:nth-child(9){width:120px}
-.rules-actions{display:flex;gap:8px;align-items:center}
+.rules-actions{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.rules-actions button{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;border:none;padding:8px 12px;border-radius:8px}
 .rules-list{min-width:320px}
 .rules-editor{min-width:360px;align-self:start}
 
@@ -41,6 +42,12 @@ table tbody td{padding:8px;border-bottom:1px solid rgba(0,0,0,0.04);overflow:hid
 .table-wrap{resize:vertical;overflow:auto}
 .editor-page{max-width:900px}
 #backToRules{background:transparent;color:var(--accent);border:1px solid rgba(0,0,0,0.04);padding:6px 8px;border-radius:6px;margin-bottom:8px}
+
+/* Editor form improvements */
+.editor-page label{display:block;margin-bottom:12px}
+.editor-page input,.editor-page textarea,.editor-page select{width:100%;padding:10px;border-radius:6px;border:1px solid rgba(0,0,0,0.08)}
+.editor-page textarea{min-height:80px}
+.editor-page .editor-actions{margin-top:12px}
 
 /* Dataframe style */
 table{border:1px solid rgba(0,0,0,0.06);border-radius:6px;overflow:hidden}
