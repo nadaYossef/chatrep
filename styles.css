@@ -25,6 +25,11 @@ table tbody td{padding:8px;border-bottom:1px solid rgba(0,0,0,0.04);overflow:hid
 .rules-list{min-width:320px}
 .rules-editor{min-width:360px;align-self:start}
 
+/* resizable table container */
+.table-wrap{resize:vertical;overflow:auto}
+.editor-page{max-width:900px}
+#backToRules{background:transparent;color:var(--accent);border:1px solid rgba(0,0,0,0.04);padding:6px 8px;border-radius:6px;margin-bottom:8px}
+
 /* Dataframe style */
 table{border:1px solid rgba(0,0,0,0.06);border-radius:6px;overflow:hidden}
 table tbody tr:nth-child(odd){background:rgba(255,255,255,0.6)}
