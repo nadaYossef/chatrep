@@ -63,6 +63,9 @@ function loadRule(i){
   qsa('#ruleTable tbody tr').forEach(tr=>tr.classList.remove('selected-row'));
   const sel = qs(`#ruleTable tbody tr:nth-child(${i+1})`);
   if(sel) sel.classList.add('selected-row');
+  // open questions page
+  qsa('.page').forEach(p=>p.classList.add('hidden'));
+  qs('#ruleQuestions').classList.remove('hidden');
 }
 
 qs('#saveRule').addEventListener('click',()=>{
