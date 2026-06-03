@@ -3,19 +3,18 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Telecom SR Anomaly Assistant</title>
+  <title>e& SR Anomaly Assistant</title>
   <link rel="stylesheet" href="styles.css" />
-  <meta name="description" content="Telecom SR anomaly detection helper: business rules, docs, warnings and future chatbot." />
+  <meta name="description" content="e& SR anomaly detection helper: business rules, docs and future chatbot." />
 </head>
 <body>
   <header class="site-header">
-    <div class="brand">Telecom SR Assistant</div>
+    <div class="brand">e& SR Assistant</div>
     <nav>
       <button data-target="home">Home</button>
       <button data-target="rules">Business Rules</button>
       <button data-target="docs">Documentation</button>
-      <button data-target="chatbot">Chatbot</button>
-      <button data-target="warnings">Warnings</button>
+
     </nav>
     <div class="share">
       <button id="copyLink">Copy shareable link</button>
@@ -25,13 +24,45 @@
   <main class="container">
     <section id="home" class="page">
       <h1>Welcome</h1>
-      <p>This portal helps extract business rules and detect or predict SR (service request) anomalies for a telecom company. Use the navigation to manage rules, read documentation, and view SR explosion warnings. A chatbot will be added later.</p>
-      <p>Color theme: rosy / reddish for clear visual priority and alerts.</p>
+      <p>This portal helps extract business rules and support the detection and prediction of SR (service request) anomalies for e&. Use the navigation to manage rules and documentation. Over time this site will help build a chatbot and an automated warning system.</p>
+
+      <h2>Public & safety notice</h2>
+      <ul>
+        <li>This site is public. It intentionally does NOT include any credentials, direct database connections, or automated actions.</li>
+        <li>Purpose: (1) implement and share business rules, (2) make onboarding easier for turnover staff, and (3) collect structured feedback and data to design a future chatbot and warning system.</li>
+        <li>Data entered here is for demonstration and collaborative review. Peers can correct or add rules if they see new SR patterns.</li>
+      </ul>
+
+      <h2>About the chatbot & warning system (how this will evolve)</h2>
+      <p>This site is the foundation for a multi-stage project:
+      </p>
+      <ol>
+        <li>Collect business rules and structured SR records from users.</li>
+        <li>Use those records to build a simple chatbot prototype that accepts an input (for example, a dial/phone number or SR id) and returns a diagnosed issue with reasoning and evidence taken from the business rules and stored data.</li>
+        <li>Collect user feedback and star ratings to measure accuracy.</li>
+        <li>Train supervised NLP models (and fine-tune an LLM) on the labeled examples and accuracy annotations to produce a human-like assistant that recommends steps.</li>
+        <li>When a scenario is repeatedly highly rated, we may offer automation; otherwise continue to provide recommended steps and ask users to verify before action.</li>
+      </ol>
+
+      <h3>Chatbot simulation (read-only)</h3>
+      <p>The first chatbot prototype will be read-only and simulate interpretation. Example:
+      </p>
+      <pre>
+Entered dial or number: 0123456789
+Diagnosed issue: Packet loss detected on last-hop
+Reasoning / evidence: Repeated timeouts in last 3 probes; high retry count in SR row 'retries'; matches rule 'last-hop packet loss'.
+
+Please enter your feedback below.
+Accuracy (1-5): [ ]
+If incorrect, please write the correct detected issue and the correct steps taken.
+      </pre>
+
+      <p>Notes: the next interactive version will accept live inputs, call the trained model, and speak recommendations. Training uses exported examples and accuracy ratings (supervised learning + LLM fine-tuning).</p>
     </section>
 
     <section id="rules" class="page hidden">
       <h1>Business Rules</h1>
-      <p class="explain">Business rules define how to inspect SR tickets in a queue and classify actions: escalate, reject, handle, or transfer. Rules are editable by team members here. Rules are stored locally in your browser; for multi-user collaboration host this site and connect to a shared backend database.</p>
+      <p class="explain">Business rules define how to inspect SR tickets and determine the detected issue, what to look for, and the recommended action. Rules are editable by team members here. Rules are stored locally in your browser for this demo; for multi-user collaboration host this site and connect to a shared backend database and add authentication.</p>
 
       <div class="rules-grid">
         <div class="rules-list">
@@ -41,23 +72,27 @@
         </div>
         <div class="rules-editor">
           <h2 id="editorTitle">Add / Edit Rule</h2>
-          <label>Title<input id="ruleTitle" /></label>
-          <label>Condition<textarea id="ruleCondition" rows="4"></textarea></label>
-          <label>Lookouts (comma separated)<input id="ruleLookouts" /></label>
-          <label>Action
-            <select id="ruleAction">
+          <label>Rule title<input id="ruleTitle" /></label>
+          <label>Detected issue (mandatory)<textarea id="ruleDetected" rows="2"></textarea></label>
+          <label>What actions you took to notice this issue (mandatory)<textarea id="ruleActionsTaken" rows="2"></textarea></label>
+          <label>What rows / tabs / fields you looked for (mandatory)<input id="ruleLookouts" /></label>
+          <label>Platforms checked (optional)<input id="rulePlatforms" /></label>
+          <label>How sure were you?<select id="ruleConfidence"><option>low</option><option>medium</option><option>high</option></select></label>
+          <label>Recommended action (mandatory)
+            <select id="ruleRecommendedAction">
               <option>escalate</option>
               <option>reject</option>
               <option>handle</option>
               <option>transfer</option>
             </select>
           </label>
+          <label>(optional) If you took the action, how successful was it?<select id="ruleOutcome"><option>unknown</option><option>failed</option><option>partial</option><option>successful</option></select></label>
           <div class="editor-actions">
             <button id="saveRule">Save</button>
             <button id="deleteRule" class="danger">Delete</button>
             <button id="clearRule">Clear</button>
           </div>
-          <p class="note">Tip: Rules should include what to look for in SR fields (timestamps, error codes, queue wait times, retries) and the suggested team action.</p>
+          <p class="note">Tip: Include concrete evidence (field names, thresholds, sample values) and clear recommended actions. Mandatory fields are labeled as such.</p>
         </div>
       </div>
     </section>
@@ -71,52 +106,10 @@
       </div>
     </section>
 
-    <section id="chatbot" class="page hidden">
-      <h1>Chatbot (placeholder)</h1>
-      <p class="explain">Interactive chatbot to be implemented later. This area will hold the chat UI and options to capture feedback and accuracy measures. For now we provide a feedback capture form that exports to a JSON file for later analysis.</p>
-      <div class="chatbot-area">
-        <label>Feedback text<textarea id="cbFeedback" rows="4"></textarea></label>
-        <label>Accuracy estimate (0-100)<input id="cbAccuracy" type="number" min="0" max="100" value="0" /></label>
-        <button id="saveCbFeedback">Save feedback</button>
-        <button id="exportCbFeedback">Export feedback (JSON)</button>
-        <ul id="cbFeedbackList"></ul>
-      </div>
-    </section>
-
-    <section id="warnings" class="page hidden">
-      <h1>Warnings</h1>
-      <p class="explain">This page predicts SR explosion warnings before they happen. For each SR you can see a predicted probability, reasoning, and recommended action. Feedback (star rating and comments) can be exported for later study.</p>
-      <div class="warnings-grid">
-        <form id="warningForm">
-          <label>SR ID<input id="srId" required /></label>
-          <label>Predicted explosion probability (%)<input id="prob" type="number" min="0" max="100" value="10" /></label>
-          <label>Reasoning<textarea id="reason" rows="4"></textarea></label>
-          <label>Recommended action
-            <select id="warnAction">
-              <option>escalate</option>
-              <option>reject</option>
-              <option>handle</option>
-              <option>transfer</option>
-            </select>
-          </label>
-          <button type="submit">Add warning</button>
-        </form>
-
-        <div class="warnings-list">
-          <h2>Predicted Warnings</h2>
-          <ul id="warningsList"></ul>
-          <button id="exportWarnings">Export warnings (JSON)</button>
-        </div>
-      </div>
-      <div class="feedback-explain">
-        <h3>Star feedback explanation</h3>
-        <p>1 star: Incorrect prediction / harmful; 2 stars: Mostly wrong; 3 stars: Acceptable but needs improvement; 4 stars: Good; 5 stars: Excellent. Collect these ratings to measure model accuracy and user trust.</p>
-      </div>
-    </section>
   </main>
 
   <footer class="site-footer">
-    <div>Made for telecom SR anomaly detection — local demo. To share widely, deploy to GitHub Pages or Netlify.</div>
+    <div>Demo site for e& SR rule collection and chatbot/warning system design.</div>
   </footer>
 
   <script src="app.js"></script>
