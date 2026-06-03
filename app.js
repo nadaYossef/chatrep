@@ -40,11 +40,20 @@ function renderRules(){
     `;
     tbody.appendChild(tr);
   });
-  qsa('#ruleTable button.edit').forEach(b=>b.addEventListener('click',e=>{ const i = +b.dataset.i; loadRule(i); }));
-  qsa('#ruleTable button.delRow').forEach(b=>b.addEventListener('click',e=>{ const i = +b.dataset.i; if(!confirm('Delete rule?')) return; rules.splice(i,1); localStorage.setItem('rules:v1',JSON.stringify(rules)); renderRules(); }));
+  // use event delegation for edit/delete buttons to avoid issues with overlays
+  const tbodyEl = qs('#ruleTable tbody');
+  tbodyEl.removeEventListener && tbodyEl.removeEventListener('click', tbodyEl._handler);
+  const handler = (e)=>{
+    const btn = e.target.closest('button'); if(!btn) return;
+    const idx = +(btn.dataset.i||-1);
+    if(btn.classList.contains('edit')){ loadRule(idx); }
+    if(btn.classList.contains('delRow')){ if(!confirm('Delete rule?')) return; rules.splice(idx,1); localStorage.setItem('rules:v1',JSON.stringify(rules)); renderRules(); }
+  };
+  tbodyEl.addEventListener('click', handler);
+  tbodyEl._handler = handler;
 }
 
-qs('#addRuleBtn').addEventListener('click',()=>{ clearEditor(); qs('#ruleTitle').focus(); });
+qs('#addRuleBtn').addEventListener('click',()=>{ clearEditor(); qsa('.page').forEach(p=>p.classList.add('hidden')); qs('#ruleQuestions').classList.remove('hidden'); qs('#ruleTitle').focus(); });
 function clearEditor(){ editIndex=-1; qs('#editorTitle').textContent='Add / Edit Rule'; qs('#ruleTitle').value=''; qs('#ruleDetected').value=''; qs('#ruleActionsTaken').value=''; qs('#ruleLookouts').value=''; qs('#rulePlatforms').value=''; qs('#ruleConfidence').value='medium'; qs('#ruleRecommendedAction').value='handle'; qs('#ruleOutcome').value='unknown'; qs('#deleteRule').style.display='none'; qsa('#ruleTable tbody tr').forEach(tr=>tr.classList.remove('selected-row')); }
 function loadRule(i){
   editIndex = i;
