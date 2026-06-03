@@ -33,11 +33,15 @@ function renderRules(){
       <td>${escapeHtml(r.recommendedAction)}</td>
       <td>${escapeHtml(r.confidence)}</td>
       <td>${escapeHtml(r.outcome||'unknown')}</td>
-      <td><button data-i="${i}" class="edit">Edit</button></td>
+      <td>
+        <button data-i="${i}" class="edit">Edit</button>
+        <button data-i="${i}" class="delRow danger">Delete</button>
+      </td>
     `;
     tbody.appendChild(tr);
   });
   qsa('#ruleTable button.edit').forEach(b=>b.addEventListener('click',e=>{ const i = +b.dataset.i; loadRule(i); }));
+  qsa('#ruleTable button.delRow').forEach(b=>b.addEventListener('click',e=>{ const i = +b.dataset.i; if(!confirm('Delete rule?')) return; rules.splice(i,1); localStorage.setItem('rules:v1',JSON.stringify(rules)); renderRules(); }));
 }
 
 qs('#addRuleBtn').addEventListener('click',()=>{ clearEditor(); qs('#ruleTitle').focus(); });
