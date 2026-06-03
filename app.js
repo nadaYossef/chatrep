@@ -21,21 +21,23 @@ let editIndex = -1;
 function escapeHtml(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function renderRules(){
-  const ul = qs('#ruleItems'); ul.innerHTML='';
+  const tbody = qs('#ruleTable tbody'); tbody.innerHTML='';
   rules.forEach((r,i)=>{
-    const li = document.createElement('li'); li.className='rule-item';
-    li.innerHTML = `
-      <div>
-        <div><strong>${escapeHtml(r.title)}</strong></div>
-        <div class="rule-meta">Detected: ${escapeHtml(r.detected)} • Recommended: ${escapeHtml(r.recommendedAction)} • Confidence: ${escapeHtml(r.confidence)}</div>
-        <div class="rule-meta">Platforms: ${escapeHtml(r.platforms||'n/a')} • Lookouts: ${escapeHtml(r.lookouts)}</div>
-        <div class="rule-meta">Actions taken: ${escapeHtml(r.actionsTaken||'')}</div>
-        <div class="rule-meta">Outcome: ${escapeHtml(r.outcome||'unknown')}</div>
-      </div>
-      <div><button data-i="${i}" class="edit">Edit</button></div>`;
-    ul.appendChild(li);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${i+1}</td>
+      <td>${escapeHtml(r.title)}</td>
+      <td>${escapeHtml(r.detected)}</td>
+      <td>${escapeHtml(r.lookouts)}</td>
+      <td>${escapeHtml(r.platforms||'')}</td>
+      <td>${escapeHtml(r.recommendedAction)}</td>
+      <td>${escapeHtml(r.confidence)}</td>
+      <td>${escapeHtml(r.outcome||'unknown')}</td>
+      <td><button data-i="${i}" class="edit">Edit</button></td>
+    `;
+    tbody.appendChild(tr);
   });
-  qsa('#ruleItems button.edit').forEach(b=>b.addEventListener('click',e=>{ const i = +b.dataset.i; loadRule(i); }));
+  qsa('#ruleTable button.edit').forEach(b=>b.addEventListener('click',e=>{ const i = +b.dataset.i; loadRule(i); }));
 }
 
 qs('#addRuleBtn').addEventListener('click',()=>{ clearEditor(); qs('#ruleTitle').focus(); });
@@ -63,6 +65,17 @@ qs('#saveRule').addEventListener('click',()=>{
 qs('#deleteRule').addEventListener('click',()=>{ if(editIndex<0) return; if(!confirm('Delete this rule?')) return; rules.splice(editIndex,1); localStorage.setItem('rules:v1',JSON.stringify(rules)); renderRules(); clearEditor(); });
 qs('#clearRule').addEventListener('click',clearEditor);
 renderRules();
+
+// Export table CSV
+qs('#exportRulesBtn')?.addEventListener('click',()=>{
+  if(!rules.length) return alert('No rules to export');
+  const header = ['index','title','detected','lookouts','platforms','recommendedAction','confidence','outcome','updated'];
+  const rows = rules.map((r,i)=>[i+1, r.title, r.detected, r.lookouts, r.platforms, r.recommendedAction, r.confidence, r.outcome||'', r.updated||'']);
+  const csv = [header, ...rows].map(r=>r.map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');
+  downloadCSV(csv,'rules_export.csv');
+});
+
+function downloadCSV(text, name){ const blob = new Blob([text], {type:'text/csv'}); const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); }
 
 // Documentation uploads (stored metadata + file in IndexedDB simplified via localStorage base64 for demo)
 let docs = JSON.parse(localStorage.getItem('docs:v1')||'[]');
