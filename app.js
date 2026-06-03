@@ -45,8 +45,25 @@ function renderRules(){
 }
 
 qs('#addRuleBtn').addEventListener('click',()=>{ clearEditor(); qs('#ruleTitle').focus(); });
-function clearEditor(){ editIndex=-1; qs('#editorTitle').textContent='Add / Edit Rule'; qs('#ruleTitle').value=''; qs('#ruleDetected').value=''; qs('#ruleActionsTaken').value=''; qs('#ruleLookouts').value=''; qs('#rulePlatforms').value=''; qs('#ruleConfidence').value='medium'; qs('#ruleRecommendedAction').value='handle'; qs('#ruleOutcome').value='unknown'; qs('#deleteRule').style.display='none'; }
-function loadRule(i){ editIndex=i; const r = rules[i]; qs('#editorTitle').textContent='Edit Rule'; qs('#ruleTitle').value=r.title; qs('#ruleDetected').value=r.detected||''; qs('#ruleActionsTaken').value=r.actionsTaken||''; qs('#ruleLookouts').value=r.lookouts||''; qs('#rulePlatforms').value=r.platforms||''; qs('#ruleConfidence').value=r.confidence||'medium'; qs('#ruleRecommendedAction').value=r.recommendedAction||'handle'; qs('#ruleOutcome').value=r.outcome||'unknown'; qs('#deleteRule').style.display='inline-block'; }
+function clearEditor(){ editIndex=-1; qs('#editorTitle').textContent='Add / Edit Rule'; qs('#ruleTitle').value=''; qs('#ruleDetected').value=''; qs('#ruleActionsTaken').value=''; qs('#ruleLookouts').value=''; qs('#rulePlatforms').value=''; qs('#ruleConfidence').value='medium'; qs('#ruleRecommendedAction').value='handle'; qs('#ruleOutcome').value='unknown'; qs('#deleteRule').style.display='none'; qsa('#ruleTable tbody tr').forEach(tr=>tr.classList.remove('selected-row')); }
+function loadRule(i){
+  editIndex = i;
+  const r = rules[i];
+  qs('#editorTitle').textContent = 'Edit Rule';
+  qs('#ruleTitle').value = r.title;
+  qs('#ruleDetected').value = r.detected||'';
+  qs('#ruleActionsTaken').value = r.actionsTaken||'';
+  qs('#ruleLookouts').value = r.lookouts||'';
+  qs('#rulePlatforms').value = r.platforms||'';
+  qs('#ruleConfidence').value = r.confidence||'medium';
+  qs('#ruleRecommendedAction').value = r.recommendedAction||'handle';
+  qs('#ruleOutcome').value = r.outcome||'unknown';
+  qs('#deleteRule').style.display = 'inline-block';
+  // highlight selected row
+  qsa('#ruleTable tbody tr').forEach(tr=>tr.classList.remove('selected-row'));
+  const sel = qs(`#ruleTable tbody tr:nth-child(${i+1})`);
+  if(sel) sel.classList.add('selected-row');
+}
 
 qs('#saveRule').addEventListener('click',()=>{
   const r = {
