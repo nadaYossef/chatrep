@@ -69,6 +69,8 @@ If incorrect, please write the correct detected issue and the correct steps take
           <h2>Rules</h2>
           <div class="rules-actions">
             <button id="addRuleBtn">Add Rule</button>
+            <button id="editSelected">Edit selected</button>
+            <button id="deleteSelected" class="danger">Delete selected</button>
             <button id="exportRulesBtn">Export Table (CSV)</button>
           </div>
           <div class="table-wrap">
@@ -83,7 +85,6 @@ If incorrect, please write the correct detected issue and the correct steps take
                   <th>Recommended</th>
                   <th>Confidence</th>
                   <th>Outcome</th>
-                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -109,12 +110,7 @@ If incorrect, please write the correct detected issue and the correct steps take
         <label>Platforms checked (optional)<input id="rulePlatforms" /></label>
         <label>How sure were you?<select id="ruleConfidence"><option>low</option><option>medium</option><option>high</option></select></label>
         <label>Recommended action (mandatory)
-          <select id="ruleRecommendedAction">
-            <option>escalate</option>
-            <option>reject</option>
-            <option>handle</option>
-            <option>transfer</option>
-          </select>
+          <input id="ruleRecommendedAction" type="text" placeholder="Describe recommended action" />
         </label>
         <label>(optional) If you took the action, how successful was it?<select id="ruleOutcome"><option>unknown</option><option>failed</option><option>partial</option><option>successful</option></select></label>
         <div class="editor-actions">
