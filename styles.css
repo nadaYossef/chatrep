@@ -17,6 +17,11 @@ nav button:hover{background:var(--glass);color:var(--accent-2)}
 .page{background:var(--card);padding:18px;border-radius:10px;box-shadow:0 6px 18px rgba(226,18,78,0.06);margin-bottom:18px}
 .hidden{display:none}
 .rules-grid{display:grid;grid-template-columns:320px 1fr;gap:16px}
+.table-wrap{overflow:auto;margin-top:12px}
+table{width:100%;border-collapse:collapse}
+table thead th{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white;padding:8px;border-radius:4px}
+table tbody td{padding:8px;border-bottom:1px solid rgba(0,0,0,0.04)}
+.rules-actions{display:flex;gap:8px;align-items:center}
 .rules-list ul,.docs-area ul,.warnings-list ul,#cbFeedbackList{list-style:none;padding:0}
 li.rule-item{background:#fff;padding:8px;border-radius:6px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(0,0,0,0.04)}
 .rule-meta{font-size:0.9rem;color:var(--muted)}
