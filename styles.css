@@ -24,6 +24,13 @@ table tbody td{padding:8px;border-bottom:1px solid rgba(0,0,0,0.04);overflow:hid
 .rules-actions{display:flex;gap:8px;align-items:center}
 .rules-list{min-width:320px}
 .rules-editor{min-width:360px;align-self:start}
+
+/* Dataframe style */
+table{border:1px solid rgba(0,0,0,0.06);border-radius:6px;overflow:hidden}
+table tbody tr:nth-child(odd){background:rgba(255,255,255,0.6)}
+table tbody tr:hover{background:rgba(251,113,133,0.06)}
+td button{margin-right:6px}
+.selected-row{outline:2px solid rgba(225,29,72,0.12)}
 .rules-list ul,.docs-area ul,.warnings-list ul,#cbFeedbackList{list-style:none;padding:0}
 li.rule-item{background:#fff;padding:8px;border-radius:6px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(0,0,0,0.04)}
 .rule-meta{font-size:0.9rem;color:var(--muted)}
