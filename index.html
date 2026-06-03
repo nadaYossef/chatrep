@@ -90,30 +90,39 @@ If incorrect, please write the correct detected issue and the correct steps take
             </table>
           </div>
         </div>
-        <div class="rules-editor">
-          <h2 id="editorTitle">Add / Edit Rule</h2>
-          <label>Rule title<input id="ruleTitle" /></label>
-          <label>Detected issue (mandatory)<textarea id="ruleDetected" rows="2"></textarea></label>
-          <label>What actions you took to notice this issue (mandatory)<textarea id="ruleActionsTaken" rows="2"></textarea></label>
-          <label>What rows / tabs / fields you looked for (mandatory)<input id="ruleLookouts" /></label>
-          <label>Platforms checked (optional)<input id="rulePlatforms" /></label>
-          <label>How sure were you?<select id="ruleConfidence"><option>low</option><option>medium</option><option>high</option></select></label>
-          <label>Recommended action (mandatory)
-            <select id="ruleRecommendedAction">
-              <option>escalate</option>
-              <option>reject</option>
-              <option>handle</option>
-              <option>transfer</option>
-            </select>
-          </label>
-          <label>(optional) If you took the action, how successful was it?<select id="ruleOutcome"><option>unknown</option><option>failed</option><option>partial</option><option>successful</option></select></label>
-          <div class="editor-actions">
-            <button id="saveRule">Save</button>
-            <button id="deleteRule" class="danger">Delete</button>
-            <button id="clearRule">Clear</button>
-          </div>
-          <p class="note">Tip: Include concrete evidence (field names, thresholds, sample values) and clear recommended actions. Mandatory fields are labeled as such.</p>
+        <div class="rules-editor-placeholder">
+          <p class="muted">Select Add or Edit to open the rule questions page and complete the entry.</p>
         </div>
+      </div>
+    </section>
+
+    <section id="ruleQuestions" class="page hidden">
+      <h1>Rule Questions</h1>
+      <p class="explain">Answer the following structured questions to add or update a business rule. Use the Delete button below to remove the rule.</p>
+      <div class="editor-page">
+        <button id="backToRules">← Back to rules table</button>
+        <h2 id="editorTitle">Add / Edit Rule</h2>
+        <label>Rule title<input id="ruleTitle" /></label>
+        <label>Detected issue (mandatory)<textarea id="ruleDetected" rows="3"></textarea></label>
+        <label>What actions you took to notice this issue (mandatory)<textarea id="ruleActionsTaken" rows="3"></textarea></label>
+        <label>What rows / tabs / fields you looked for (mandatory)<input id="ruleLookouts" /></label>
+        <label>Platforms checked (optional)<input id="rulePlatforms" /></label>
+        <label>How sure were you?<select id="ruleConfidence"><option>low</option><option>medium</option><option>high</option></select></label>
+        <label>Recommended action (mandatory)
+          <select id="ruleRecommendedAction">
+            <option>escalate</option>
+            <option>reject</option>
+            <option>handle</option>
+            <option>transfer</option>
+          </select>
+        </label>
+        <label>(optional) If you took the action, how successful was it?<select id="ruleOutcome"><option>unknown</option><option>failed</option><option>partial</option><option>successful</option></select></label>
+        <div class="editor-actions">
+          <button id="saveRule">Save</button>
+          <button id="deleteRule" class="danger">Delete</button>
+          <button id="clearRule">Clear</button>
+        </div>
+        <p class="note">Tip: Include concrete evidence (field names, thresholds, sample values) and clear recommended actions. Mandatory fields are labeled as such.</p>
       </div>
     </section>
 
