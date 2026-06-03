@@ -1,0 +1,37 @@
+:root{
+  --bg: #fff7f8;
+  --card: #fff0f2;
+  --accent: #e11d48; /* deep rose */
+  --accent-2: #fb7185; /* lighter */
+  --muted: #6b7280;
+  --danger: #b91c1c;
+  --glass: rgba(255,255,255,0.6);
+}
+*{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
+body{margin:0;background:linear-gradient(180deg,var(--bg),#fff);color:#2b2b2b}
+.site-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:linear-gradient(90deg,var(--card),#fff);border-bottom:1px solid rgba(0,0,0,0.04)}
+.brand{font-weight:700;color:var(--accent);font-size:1.2rem}
+nav button{background:transparent;border:none;padding:8px 10px;border-radius:6px;margin-right:6px;cursor:pointer;color:var(--muted)}
+nav button:hover{background:var(--glass);color:var(--accent-2)}
+.container{padding:20px;max-width:1100px;margin:18px auto}
+.page{background:var(--card);padding:18px;border-radius:10px;box-shadow:0 6px 18px rgba(226,18,78,0.06);margin-bottom:18px}
+.hidden{display:none}
+.rules-grid{display:grid;grid-template-columns:320px 1fr;gap:16px}
+.rules-list ul,.docs-area ul,.warnings-list ul,#cbFeedbackList{list-style:none;padding:0}
+li.rule-item{background:#fff;padding:8px;border-radius:6px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(0,0,0,0.04)}
+.rule-meta{font-size:0.9rem;color:var(--muted)}
+.rules-editor label{display:block;margin-bottom:8px}
+.rules-editor input,.rules-editor textarea,.rules-editor select{width:100%;padding:8px;border-radius:6px;border:1px solid rgba(0,0,0,0.08)}
+.editor-actions{display:flex;gap:8px;margin-top:8px}
+.danger{background:transparent;border:1px solid var(--danger);color:var(--danger);padding:6px 10px;border-radius:6px}
+button{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+button[disabled]{opacity:0.5;cursor:not-allowed}
+.explain{background:rgba(255,255,255,0.5);padding:8px;border-radius:6px;border:1px dashed rgba(0,0,0,0.04)}
+.docs-area input{margin-bottom:12px}
+.warnings-grid{display:flex;gap:16px}
+.warnings-grid form{flex:1;min-width:280px}
+.warnings-list{flex:1}
+.feedback-explain{margin-top:12px;background:#fff;padding:12px;border-radius:8px}
+.site-footer{padding:12px;text-align:center;color:var(--muted);font-size:0.9rem}
+
+@media(max-width:880px){.rules-grid{grid-template-columns:1fr}.warnings-grid{flex-direction:column}}

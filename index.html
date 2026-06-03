@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Telecom SR Anomaly Assistant</title>
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Telecom SR anomaly detection helper: business rules, docs, warnings and future chatbot." />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">Telecom SR Assistant</div>
+    <nav>
+      <button data-target="home">Home</button>
+      <button data-target="rules">Business Rules</button>
+      <button data-target="docs">Documentation</button>
+      <button data-target="chatbot">Chatbot</button>
+      <button data-target="warnings">Warnings</button>
+    </nav>
+    <div class="share">
+      <button id="copyLink">Copy shareable link</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="home" class="page">
+      <h1>Welcome</h1>
+      <p>This portal helps extract business rules and detect or predict SR (service request) anomalies for a telecom company. Use the navigation to manage rules, read documentation, and view SR explosion warnings. A chatbot will be added later.</p>
+      <p>Color theme: rosy / reddish for clear visual priority and alerts.</p>
+    </section>
+
+    <section id="rules" class="page hidden">
+      <h1>Business Rules</h1>
+      <p class="explain">Business rules define how to inspect SR tickets in a queue and classify actions: escalate, reject, handle, or transfer. Rules are editable by team members here. Rules are stored locally in your browser; for multi-user collaboration host this site and connect to a shared backend database.</p>
+
+      <div class="rules-grid">
+        <div class="rules-list">
+          <h2>Rules</h2>
+          <ul id="ruleItems"></ul>
+          <button id="addRuleBtn">Add Rule</button>
+        </div>
+        <div class="rules-editor">
+          <h2 id="editorTitle">Add / Edit Rule</h2>
+          <label>Title<input id="ruleTitle" /></label>
+          <label>Condition<textarea id="ruleCondition" rows="4"></textarea></label>
+          <label>Lookouts (comma separated)<input id="ruleLookouts" /></label>
+          <label>Action
+            <select id="ruleAction">
+              <option>escalate</option>
+              <option>reject</option>
+              <option>handle</option>
+              <option>transfer</option>
+            </select>
+          </label>
+          <div class="editor-actions">
+            <button id="saveRule">Save</button>
+            <button id="deleteRule" class="danger">Delete</button>
+            <button id="clearRule">Clear</button>
+          </div>
+          <p class="note">Tip: Rules should include what to look for in SR fields (timestamps, error codes, queue wait times, retries) and the suggested team action.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="docs" class="page hidden">
+      <h1>Documentation</h1>
+      <p class="explain">Upload PDFs or slides to help new or inexperienced team members understand tools, flows, teams and references. Files are stored locally in your browser for now. In production, files would be stored in shared object storage and governed by access control.</p>
+      <div class="docs-area">
+        <input id="docUpload" type="file" accept="application/pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation" multiple />
+        <ul id="docList"></ul>
+      </div>
+    </section>
+
+    <section id="chatbot" class="page hidden">
+      <h1>Chatbot (placeholder)</h1>
+      <p class="explain">Interactive chatbot to be implemented later. This area will hold the chat UI and options to capture feedback and accuracy measures. For now we provide a feedback capture form that exports to a JSON file for later analysis.</p>
+      <div class="chatbot-area">
+        <label>Feedback text<textarea id="cbFeedback" rows="4"></textarea></label>
+        <label>Accuracy estimate (0-100)<input id="cbAccuracy" type="number" min="0" max="100" value="0" /></label>
+        <button id="saveCbFeedback">Save feedback</button>
+        <button id="exportCbFeedback">Export feedback (JSON)</button>
+        <ul id="cbFeedbackList"></ul>
+      </div>
+    </section>
+
+    <section id="warnings" class="page hidden">
+      <h1>Warnings</h1>
+      <p class="explain">This page predicts SR explosion warnings before they happen. For each SR you can see a predicted probability, reasoning, and recommended action. Feedback (star rating and comments) can be exported for later study.</p>
+      <div class="warnings-grid">
+        <form id="warningForm">
+          <label>SR ID<input id="srId" required /></label>
+          <label>Predicted explosion probability (%)<input id="prob" type="number" min="0" max="100" value="10" /></label>
+          <label>Reasoning<textarea id="reason" rows="4"></textarea></label>
+          <label>Recommended action
+            <select id="warnAction">
+              <option>escalate</option>
+              <option>reject</option>
+              <option>handle</option>
+              <option>transfer</option>
+            </select>
+          </label>
+          <button type="submit">Add warning</button>
+        </form>
+
+        <div class="warnings-list">
+          <h2>Predicted Warnings</h2>
+          <ul id="warningsList"></ul>
+          <button id="exportWarnings">Export warnings (JSON)</button>
+        </div>
+      </div>
+      <div class="feedback-explain">
+        <h3>Star feedback explanation</h3>
+        <p>1 star: Incorrect prediction / harmful; 2 stars: Mostly wrong; 3 stars: Acceptable but needs improvement; 4 stars: Good; 5 stars: Excellent. Collect these ratings to measure model accuracy and user trust.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div>Made for telecom SR anomaly detection — local demo. To share widely, deploy to GitHub Pages or Netlify.</div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
