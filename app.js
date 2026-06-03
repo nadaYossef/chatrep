@@ -33,24 +33,20 @@ function renderRules(){
       <td>${escapeHtml(r.recommendedAction)}</td>
       <td>${escapeHtml(r.confidence)}</td>
       <td>${escapeHtml(r.outcome||'unknown')}</td>
-      <td>
-        <button data-i="${i}" class="edit">Edit</button>
-        <button data-i="${i}" class="delRow danger">Delete</button>
-      </td>
     `;
     tbody.appendChild(tr);
   });
-  // use event delegation for edit/delete buttons to avoid issues with overlays
+  // clear previous selection
   const tbodyEl = qs('#ruleTable tbody');
-  tbodyEl.removeEventListener && tbodyEl.removeEventListener('click', tbodyEl._handler);
-  const handler = (e)=>{
-    const btn = e.target.closest('button'); if(!btn) return;
-    const idx = +(btn.dataset.i||-1);
-    if(btn.classList.contains('edit')){ loadRule(idx); }
-    if(btn.classList.contains('delRow')){ if(!confirm('Delete rule?')) return; rules.splice(idx,1); localStorage.setItem('rules:v1',JSON.stringify(rules)); renderRules(); }
-  };
-  tbodyEl.addEventListener('click', handler);
-  tbodyEl._handler = handler;
+  tbodyEl.dataset.selected = '';
+  tbodyEl.querySelectorAll('tr').forEach((tr, idx)=>{
+    tr.classList.remove('selected-row');
+    tr.onclick = ()=>{
+      qsa('#ruleTable tbody tr').forEach(r=>r.classList.remove('selected-row'));
+      tr.classList.add('selected-row');
+      tbodyEl.dataset.selected = String(idx);
+    };
+  });
 }
 
 qs('#addRuleBtn').addEventListener('click',()=>{ clearEditor(); qsa('.page').forEach(p=>p.classList.add('hidden')); qs('#ruleQuestions').classList.remove('hidden'); qs('#ruleTitle').focus(); });
@@ -93,6 +89,18 @@ qs('#saveRule').addEventListener('click',()=>{
   if(!r.detected || !r.actionsTaken || !r.lookouts || !r.recommendedAction){ alert('Please fill all mandatory fields: detected issue, actions taken, lookouts, recommended action'); return; }
   if(editIndex>=0) rules[editIndex]=r; else rules.push(r);
   localStorage.setItem('rules:v1',JSON.stringify(rules)); renderRules(); clearEditor();
+});
+
+// Edit / Delete selected buttons
+qs('#editSelected')?.addEventListener('click',()=>{
+  const sel = qs('#ruleTable tbody').dataset.selected;
+  if(sel===undefined) return alert('Select a row first');
+  loadRule(+sel);
+});
+qs('#deleteSelected')?.addEventListener('click',()=>{
+  const sel = qs('#ruleTable tbody').dataset.selected;
+  if(sel===undefined) return alert('Select a row first');
+  if(!confirm('Delete selected rule?')) return; rules.splice(+sel,1); localStorage.setItem('rules:v1',JSON.stringify(rules)); renderRules();
 });
 
 qs('#deleteRule').addEventListener('click',()=>{ if(editIndex<0) return; if(!confirm('Delete this rule?')) return; rules.splice(editIndex,1); localStorage.setItem('rules:v1',JSON.stringify(rules)); renderRules(); clearEditor(); });
