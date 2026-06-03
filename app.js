@@ -18,33 +18,49 @@ qs('#copyLink').addEventListener('click',()=>{
 // Business rules
 let rules = JSON.parse(localStorage.getItem('rules:v1')||'[]');
 let editIndex = -1;
+function escapeHtml(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
 function renderRules(){
   const ul = qs('#ruleItems'); ul.innerHTML='';
   rules.forEach((r,i)=>{
     const li = document.createElement('li'); li.className='rule-item';
-    li.innerHTML = `<div><div><strong>${escapeHtml(r.title)}</strong></div><div class="rule-meta">Action: ${r.action} • Lookouts: ${escapeHtml(r.lookouts)}</div></div><div><button data-i="${i}" class="edit">Edit</button></div>`;
+    li.innerHTML = `
+      <div>
+        <div><strong>${escapeHtml(r.title)}</strong></div>
+        <div class="rule-meta">Detected: ${escapeHtml(r.detected)} • Recommended: ${escapeHtml(r.recommendedAction)} • Confidence: ${escapeHtml(r.confidence)}</div>
+        <div class="rule-meta">Platforms: ${escapeHtml(r.platforms||'n/a')} • Lookouts: ${escapeHtml(r.lookouts)}</div>
+        <div class="rule-meta">Actions taken: ${escapeHtml(r.actionsTaken||'')}</div>
+        <div class="rule-meta">Outcome: ${escapeHtml(r.outcome||'unknown')}</div>
+      </div>
+      <div><button data-i="${i}" class="edit">Edit</button></div>`;
     ul.appendChild(li);
   });
-  qsa('#ruleItems button.edit').forEach(b=>b.addEventListener('click',e=>{
-    const i = +b.dataset.i; loadRule(i);
-  }));
+  qsa('#ruleItems button.edit').forEach(b=>b.addEventListener('click',e=>{ const i = +b.dataset.i; loadRule(i); }));
 }
 
-function escapeHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
 qs('#addRuleBtn').addEventListener('click',()=>{ clearEditor(); qs('#ruleTitle').focus(); });
-function clearEditor(){ editIndex=-1; qs('#editorTitle').textContent='Add / Edit Rule'; qs('#ruleTitle').value=''; qs('#ruleCondition').value=''; qs('#ruleLookouts').value=''; qs('#ruleAction').value='handle'; qs('#deleteRule').style.display='none'; }
-function loadRule(i){ editIndex=i; const r = rules[i]; qs('#editorTitle').textContent='Edit Rule'; qs('#ruleTitle').value=r.title; qs('#ruleCondition').value=r.condition; qs('#ruleLookouts').value=r.lookouts; qs('#ruleAction').value=r.action; qs('#deleteRule').style.display='inline-block'; }
+function clearEditor(){ editIndex=-1; qs('#editorTitle').textContent='Add / Edit Rule'; qs('#ruleTitle').value=''; qs('#ruleDetected').value=''; qs('#ruleActionsTaken').value=''; qs('#ruleLookouts').value=''; qs('#rulePlatforms').value=''; qs('#ruleConfidence').value='medium'; qs('#ruleRecommendedAction').value='handle'; qs('#ruleOutcome').value='unknown'; qs('#deleteRule').style.display='none'; }
+function loadRule(i){ editIndex=i; const r = rules[i]; qs('#editorTitle').textContent='Edit Rule'; qs('#ruleTitle').value=r.title; qs('#ruleDetected').value=r.detected||''; qs('#ruleActionsTaken').value=r.actionsTaken||''; qs('#ruleLookouts').value=r.lookouts||''; qs('#rulePlatforms').value=r.platforms||''; qs('#ruleConfidence').value=r.confidence||'medium'; qs('#ruleRecommendedAction').value=r.recommendedAction||'handle'; qs('#ruleOutcome').value=r.outcome||'unknown'; qs('#deleteRule').style.display='inline-block'; }
 
 qs('#saveRule').addEventListener('click',()=>{
-  const r = { title:qs('#ruleTitle').value.trim()||'Untitled', condition:qs('#ruleCondition').value, lookouts:qs('#ruleLookouts').value, action:qs('#ruleAction').value };
+  const r = {
+    title: qs('#ruleTitle').value.trim()||'Untitled',
+    detected: qs('#ruleDetected').value.trim(),
+    actionsTaken: qs('#ruleActionsTaken').value.trim(),
+    lookouts: qs('#ruleLookouts').value.trim(),
+    platforms: qs('#rulePlatforms').value.trim(),
+    confidence: qs('#ruleConfidence').value,
+    recommendedAction: qs('#ruleRecommendedAction').value,
+    outcome: qs('#ruleOutcome').value,
+    updated: Date.now()
+  };
+  // Basic validation for mandatory fields
+  if(!r.detected || !r.actionsTaken || !r.lookouts || !r.recommendedAction){ alert('Please fill all mandatory fields: detected issue, actions taken, lookouts, recommended action'); return; }
   if(editIndex>=0) rules[editIndex]=r; else rules.push(r);
   localStorage.setItem('rules:v1',JSON.stringify(rules)); renderRules(); clearEditor();
 });
 
-qs('#deleteRule').addEventListener('click',()=>{
-  if(editIndex<0) return; if(!confirm('Delete this rule?')) return; rules.splice(editIndex,1); localStorage.setItem('rules:v1',JSON.stringify(rules)); renderRules(); clearEditor();
-});
+qs('#deleteRule').addEventListener('click',()=>{ if(editIndex<0) return; if(!confirm('Delete this rule?')) return; rules.splice(editIndex,1); localStorage.setItem('rules:v1',JSON.stringify(rules)); renderRules(); clearEditor(); });
 qs('#clearRule').addEventListener('click',clearEditor);
 renderRules();
 
@@ -63,22 +79,8 @@ qs('#docUpload').addEventListener('change', async (e)=>{
 function readFileAsDataURL(f){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(f); }); }
 renderDocs();
 
-// Chatbot feedback
-let cbFeedback = JSON.parse(localStorage.getItem('cbFeedback:v1')||'[]');
-function renderCb(){ const ul=qs('#cbFeedbackList'); ul.innerHTML=''; cbFeedback.forEach((f,i)=>{ const li=document.createElement('li'); li.innerHTML=`<strong>${f.accuracy}%</strong> - ${escapeHtml(f.text)} <button data-i="${i}" class="delCb danger">Delete</button>`; ul.appendChild(li); }); qsa('#cbFeedbackList button.delCb').forEach(b=>b.addEventListener('click',()=>{ cbFeedback.splice(+b.dataset.i,1); localStorage.setItem('cbFeedback:v1',JSON.stringify(cbFeedback)); renderCb(); })); }
-qs('#saveCbFeedback').addEventListener('click',()=>{ const text=qs('#cbFeedback').value.trim(); const acc=+qs('#cbAccuracy').value; if(!text) return alert('Enter feedback'); cbFeedback.push({ text, accuracy:acc, at:Date.now() }); localStorage.setItem('cbFeedback:v1',JSON.stringify(cbFeedback)); qs('#cbFeedback').value=''; renderCb(); });
-qs('#exportCbFeedback').addEventListener('click',()=>{ downloadJSON(cbFeedback,'cb_feedback.json'); });
-renderCb();
-
-// Warnings
-let warnings = JSON.parse(localStorage.getItem('warnings:v1')||'[]');
-function renderWarnings(){ const ul=qs('#warningsList'); ul.innerHTML=''; warnings.forEach((w,i)=>{ const li=document.createElement('li'); li.className='rule-item'; li.innerHTML=`<div><strong>SR ${escapeHtml(w.srId)}</strong><div class=\"rule-meta\">Prob: ${w.prob}% • Action: ${w.action}</div><div>${escapeHtml(w.reason)}</div></div><div><div class=\"stars\">${renderStars(w.rating||0, i)}</div><button data-i="${i}" class="delWarning danger">Delete</button></div>`; ul.appendChild(li); }); qsa('#warningsList button.delWarning').forEach(b=>{ b.addEventListener('click',()=>{ warnings.splice(+b.dataset.i,1); localStorage.setItem('warnings:v1',JSON.stringify(warnings)); renderWarnings(); }); }); qsa('.star-btn').forEach(b=>b.addEventListener('click',()=>{ const idx=+b.dataset.idx; const widx=+b.dataset.w; warnings[widx].rating = idx; localStorage.setItem('warnings:v1',JSON.stringify(warnings)); renderWarnings(); })); }
-function renderStars(rating, widx){ let out=''; for(let i=1;i<=5;i++){ out += `<button class="star-btn" data-idx="${i}" data-w="${widx}" title="${i} stars">${i<=rating? '★':'☆'}</button>`; } return out; }
-
-qs('#warningForm').addEventListener('submit',e=>{ e.preventDefault(); const srId=qs('#srId').value.trim(); const prob=+qs('#prob').value; const reason=qs('#reason').value.trim(); const action=qs('#warnAction').value; if(!srId) return alert('SR ID required'); warnings.push({ srId, prob, reason, action, created:Date.now() }); localStorage.setItem('warnings:v1',JSON.stringify(warnings)); renderWarnings(); qs('#warningForm').reset(); });
-qs('#exportWarnings').addEventListener('click',()=> downloadJSON(warnings,'warnings_export.json'));
+// Note: chatbot and warning UI removed from this demo. Feedback and warning exports will be implemented server-side in future versions.
 function downloadJSON(obj, name){ const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'}); const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); }
-renderWarnings();
 
 // small helpers
 function download(text, name){ const blob=new Blob([text],{type:'text/plain'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=name; a.click(); URL.revokeObjectURL(url); }
