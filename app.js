@@ -49,30 +49,7 @@ function renderRules(){
   });
 }
 
-function renderFullRules(){
-  const tbody = qs('#fullRuleTable tbody'); tbody.innerHTML='';
-  rules.forEach((r,i)=>{
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${i+1}</td>
-      <td>${escapeHtml(r.title)}</td>
-      <td>${escapeHtml(r.detected)}</td>
-      <td>${escapeHtml(r.lookouts)}</td>
-      <td>${escapeHtml(r.platforms||'')}</td>
-      <td>${escapeHtml(r.recommendedAction)}</td>
-      <td>${escapeHtml(r.confidence)}</td>
-      <td>${escapeHtml(r.outcome||'unknown')}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-  // row selection in full table
-  const tbodyEl = qs('#fullRuleTable tbody');
-  tbodyEl.dataset.selected = '';
-  tbodyEl.querySelectorAll('tr').forEach((tr, idx)=>{
-    tr.classList.remove('selected-row');
-    tr.onclick = ()=>{ qsa('#fullRuleTable tbody tr').forEach(r=>r.classList.remove('selected-row')); tr.classList.add('selected-row'); tbodyEl.dataset.selected = String(idx); };
-  });
-}
+// renderFullRules removed; full view integrated into Business Rules
 
 qs('#addRuleBtn').addEventListener('click',()=>{ clearEditor(); qsa('.page').forEach(p=>p.classList.add('hidden')); qs('#ruleQuestions').classList.remove('hidden'); qs('#ruleTitle').focus(); });
 function clearEditor(){ editIndex=-1; qs('#editorTitle').textContent='Add / Edit Rule'; qs('#ruleTitle').value=''; qs('#ruleDetected').value=''; qs('#ruleActionsTaken').value=''; qs('#ruleLookouts').value=''; qs('#rulePlatforms').value=''; qs('#ruleConfidence').value='medium'; qs('#ruleRecommendedAction').value='handle'; qs('#ruleOutcome').value='unknown'; qs('#deleteRule').style.display='none'; qsa('#ruleTable tbody tr').forEach(tr=>tr.classList.remove('selected-row')); }
@@ -128,14 +105,7 @@ qs('#deleteSelected')?.addEventListener('click',()=>{
   if(!confirm('Delete selected rule?')) return; rules.splice(+sel,1); localStorage.setItem('rules:v1',JSON.stringify(rules)); renderRules();
 });
 
-// full page controls
-qs('#addRuleBtnFull')?.addEventListener('click',()=>{ clearEditor(); qsa('.page').forEach(p=>p.classList.add('hidden')); qs('#ruleQuestions').classList.remove('hidden'); qs('#ruleTitle').focus(); });
-qs('#editSelectedFull')?.addEventListener('click',()=>{ const sel = qs('#fullRuleTable tbody').dataset.selected; if(!sel) return alert('Select a row first'); loadRule(+sel); });
-qs('#deleteSelectedFull')?.addEventListener('click',()=>{ const sel = qs('#fullRuleTable tbody').dataset.selected; if(!sel) return alert('Select a row first'); if(!confirm('Delete selected rule?')) return; rules.splice(+sel,1); localStorage.setItem('rules:v1',JSON.stringify(rules)); renderFullRules(); renderRules(); });
-qs('#exportRulesBtnFull')?.addEventListener('click',()=>{ if(!rules.length) return alert('No rules to export'); const header = ['index','title','detected','lookouts','platforms','recommendedAction','confidence','outcome','updated']; const rows = rules.map((r,i)=>[i+1, r.title, r.detected, r.lookouts, r.platforms, r.recommendedAction, r.confidence, r.outcome||'', r.updated||'']); const csv = [header, ...rows].map(r=>r.map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n'); downloadCSV(csv,'rules_export.csv'); });
-
-// when navigating to rulesFull, render table
-qsa('header nav button').forEach(b=>{ b.addEventListener('click',()=>{ if(b.dataset.target==='rulesFull'){ renderFullRules(); } }); });
+// Full page handlers removed
 
 qs('#deleteRule').addEventListener('click',()=>{ if(editIndex<0) return; if(!confirm('Delete this rule?')) return; rules.splice(editIndex,1); localStorage.setItem('rules:v1',JSON.stringify(rules)); renderRules(); clearEditor(); });
 qs('#clearRule').addEventListener('click',clearEditor);
