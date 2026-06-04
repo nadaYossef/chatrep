@@ -13,8 +13,7 @@
     <nav>
       <button data-target="home">Home</button>
       <button data-target="rules">Business Rules</button>
-      <button data-target="rulesFull">Full Rules</button>
-      <button data-target="workflow">Workflow</button>
+      <button data-target="workflow">Project 1</button>
       <button data-target="docs">Documentation</button>
 
     </nav>
@@ -62,62 +61,14 @@ If incorrect, please write the correct detected issue and the correct steps take
       <p>Notes: the next interactive version will accept live inputs, call the trained model, and speak recommendations. Training uses exported examples and accuracy ratings (supervised learning + LLM fine-tuning).</p>
     </section>
 
-    <section id="rulesFull" class="page hidden">
-      <h1>All Business Rules</h1>
-      <p class="explain">Full view of all business rules. Use the controls to add, edit or delete selected rules. Click a row to select it. This page shows the table at full width for easier navigation and review.</p>
-      <div class="full-rules-controls">
-        <button id="addRuleBtnFull">Add Rule</button>
-        <button id="editSelectedFull">Edit selected</button>
-        <button id="deleteSelectedFull" class="danger">Delete selected</button>
-        <button id="exportRulesBtnFull">Export Table (CSV)</button>
-      </div>
-      <div class="full-table-wrap">
-        <table id="fullRuleTable">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Title</th>
-              <th>Detected issue</th>
-              <th>Lookouts / fields</th>
-              <th>Platforms</th>
-              <th>Recommended</th>
-              <th>Confidence</th>
-              <th>Outcome</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
+    <!-- rulesFull removed; full table integrated in Business Rules page -->
 
     <section id="workflow" class="page hidden">
-      <h1>Project Workflow (embedded)</h1>
-      <p class="explain">The following embeds the Project 1 workflow as structured text with icons and enhanced readability. This is the same written workflow but presented as interactive content.</p>
-      <div class="workflow-grid">
-        <div class="phase card">
-          <div class="phase-title">Phase 1 — Gather & Structure Knowledge</div>
-          <ul>
-            <li>🔎 Input: existing business knowledge, first-line tools, open-only tickets, previously resolved tickets, team documentation.</li>
-            <li>🛠 Process: collect business rules, export business-table, gather documentation (PDFs, slides).</li>
-            <li>📤 Output: business knowledge table, documentation tab, examples (issue records).</li>
-          </ul>
-        </div>
-        <div class="phase card">
-          <div class="phase-title">Phase 2 — Implement & Test System</div>
-          <ul>
-            <li>⚙️ Input: business-table, exported queue & SQL queries.</li>
-            <li>🧪 Process: implement firstline tool to apply rules, generate explanations and recommended actions, collect feedback (feed.csv).</li>
-            <li>📤 Output: system outputs, explanation snippets, feedback CSV for study.</li>
-          </ul>
-        </div>
-        <div class="phase card">
-          <div class="phase-title">Phase 3 — Study Data & Train ML</div>
-          <ul>
-            <li>📈 Input: feed.csv, business-table, dynamic SR DB.</li>
-            <li>🧠 Process: train supervised NLP & model on labeled feedback to improve accuracy.</li>
-            <li>🚀 Output: trained model, improved chatbot that can recommend and (optionally) automate tasks with user approval.</li>
-          </ul>
-        </div>
+      <h1>Project 1 workflow (embedded)</h1>
+      <p class="explain">Below is the original Project 1 workflow diagram embedded. If the Google Drive preview doesn't show, download the file from the link.</p>
+      <div class="embed-wrap">
+        <iframe src="https://drive.google.com/file/d/1JTm4YQMicH6TjIlwithe9isCDvH9RPT6/preview" style="width:100%;height:720px;border:0;border-radius:8px"></iframe>
+        <p style="margin-top:8px">If the preview fails, open <a href="https://drive.google.com/file/d/1JTm4YQMicH6TjIlwithe9isCDvH9RPT6/view?usp=sharing" target="_blank">the source on Google Drive</a>.</p>
       </div>
     </section>
 
