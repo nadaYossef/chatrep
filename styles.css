@@ -18,12 +18,12 @@ nav button:hover{background:var(--glass);color:var(--accent-2)}
 .page{position:relative}
 .hidden{display:none}
 .rules-grid{display:grid;grid-template-columns:360px 1fr;gap:20px;align-items:start}
-.table-wrap{overflow:auto;margin-top:12px;max-height:260px}
+.rules-grid .table-wrap{grid-column:1 / -1}
+.table-wrap{overflow:auto;min-width:300px;margin-top:12px;max-height:520px}
 table{width:100%;border-collapse:collapse;table-layout:fixed}
 table thead th{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white;padding:6px 10px;border-radius:4px;white-space:nowrap;font-size:0.95rem}
 table tbody td{padding:8px;border-bottom:1px solid rgba(0,0,0,0.04);overflow:hidden;text-overflow:ellipsis}
-.table-wrap{overflow:auto;min-width:300px}
-#ruleTable{min-width:900px}
+#ruleTable{width:100%;table-layout:auto;min-width:1200px}
 #ruleTable th:nth-child(1), #ruleTable td:nth-child(1){width:48px}
 #ruleTable th:nth-child(2), #ruleTable td:nth-child(2){width:160px}
 #ruleTable th:nth-child(3), #ruleTable td:nth-child(3){width:200px}
