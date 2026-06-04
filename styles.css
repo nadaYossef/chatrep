@@ -49,6 +49,19 @@ table tbody td{padding:8px;border-bottom:1px solid rgba(0,0,0,0.04);overflow:hid
 .editor-page textarea{min-height:80px}
 .editor-page .editor-actions{margin-top:12px}
 
+/* Full rules page */
+.full-table-wrap{overflow:auto;border:1px solid rgba(0,0,0,0.04);border-radius:8px;padding:8px;background:#fff}
+.full-table-wrap table{width:100%;border-collapse:collapse}
+.full-table-wrap th{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;padding:10px}
+.full-table-wrap td{padding:10px;border-bottom:1px solid rgba(0,0,0,0.04)}
+.full-rules-controls{display:flex;gap:8px;margin-bottom:12px}
+
+/* Workflow styles */
+.workflow-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:12px}
+.card{background:#fff;padding:12px;border-radius:8px;border:1px solid rgba(0,0,0,0.04)}
+.phase-title{font-weight:700;color:var(--accent);margin-bottom:8px}
+.card ul{margin:0;padding-left:18px}
+
 /* Dataframe style */
 table{border:1px solid rgba(0,0,0,0.06);border-radius:6px;overflow:hidden}
 table tbody tr:nth-child(odd){background:rgba(255,255,255,0.6)}
